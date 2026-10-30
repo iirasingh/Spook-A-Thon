@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chanderi Night Watch — O Stree, Kal Aana</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,500;0,900;1,500&family=Special+Elite&family=Libre+Franklin:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050505;--s1:#0d0d0d;--s2:#161616;--line:#2b2b2b;--mute:#808080;--tx:#d9d9d9;--hi:#fff;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#050505}}
+:root[data-theme="dark"]{--bg:#050505}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font:400 16px/1.6 "Libre Franklin",system-ui,sans-serif;
+background-image:radial-gradient(ellipse at 50% -10%,#222 0,transparent 55%);min-height:100vh}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;opacity:.07;z-index:50;
+background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence baseFrequency='.9' numOctaves='2'/><feColorMatrix type='saturate' values='0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")}
+h1,h2,h3{font-family:"Bodoni Moda",Georgia,serif;color:var(--hi);margin:0;font-weight:900}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.type{font-family:"Special Elite","Courier New",monospace}
+/* HERO */
+.hero{min-height:92vh;display:flex;flex-direction:column;justify-content:space-between;padding:22px 0 40px;position:relative;overflow:hidden}
+.top{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--mute)}
+.status{display:flex;align-items:center;gap:8px;color:var(--hi)}
+.dot{width:9px;height:9px;border-radius:50%;background:#fff;animation:p 2s infinite}
+@keyframes p{50%{opacity:.15}}
+.hero h1{font-size:clamp(64px,17vw,230px);line-height:.82;letter-spacing:-.03em;text-transform:none}
+.hero h1 span{display:block;font-style:italic;font-weight:500;color:#555;font-size:.42em;letter-spacing:0;margin-top:.25em}
+.hero p{max-width:520px;color:var(--mute);margin:24px 0 0}
+.moon{position:absolute;right:-6vw;top:8vh;width:min(46vw,460px);aspect-ratio:1;border-radius:50%;
+background:radial-gradient(circle at 38% 36%,#f2f2f2 0,#9a9a9a 38%,#2a2a2a 72%,#050505 100%);filter:grayscale(1) blur(.3px);opacity:.9;z-index:0}
+.hero .wrap{position:relative;z-index:1}
+.hero-in{display:flex;flex-direction:column;gap:0}
+.btns{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.btn{background:var(--hi);color:#000;border:1px solid var(--hi);padding:12px 22px;font:600 14px "Libre Franklin",sans-serif;cursor:pointer;text-decoration:none}
+.btn.g{background:transparent;color:var(--hi);border-color:#555}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* WALL WRITING */
+.wall{background:#e8e8e8;color:#111;padding:14px 0;overflow:hidden;white-space:nowrap;border-block:2px solid #000}
+.wall div{display:inline-block;animation:slide 28s linear infinite;font:900 22px "Bodoni Moda",serif;letter-spacing:.05em}
+@keyframes slide{to{transform:translateX(-50%)}}
+section{padding:80px 0;border-bottom:1px solid var(--line)}
+.kick{color:var(--mute);font-size:14px;margin-bottom:10px}
+h2{font-size:clamp(34px,6vw,64px);line-height:1;margin-bottom:14px}
+.lead{color:var(--mute);max-width:560px;margin:0 0 36px}
+/* ALERT BOARD */
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.board>div{background:var(--s1);padding:22px}
+.board b{display:block;font:900 clamp(34px,5vw,56px)/1 "Bodoni Moda",serif;color:var(--hi)}
+.board small{color:var(--mute)}
+.level{grid-column:1/-1;background:#fff!important;color:#000;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:center}
+.level strong{font:900 28px "Bodoni Moda",serif}
+/* MAP */
+.mapgrid{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}
+.mapbox{background:var(--s1);border:1px solid var(--line);position:relative}
+svg{display:block;width:100%;height:auto}
+.pin{cursor:pointer}
+.pin:focus-visible circle.h{stroke:#fff;stroke-width:3}
+.pin .ring{fill:none;stroke:#fff;stroke-width:1.5;transform-box:fill-box;transform-origin:center;animation:ring 2.4s infinite}
+@keyframes ring{from{transform:scale(.6);opacity:.9}to{transform:scale(2.2);opacity:0}}
+.lab{fill:#8a8a8a;font:11px "Special Elite",monospace}
+.lab.k{fill:#cfcfcf;font-size:12px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.chip{background:transparent;color:var(--tx);border:1px solid #444;padding:6px 14px;font:13px "Libre Franklin",sans-serif;cursor:pointer}
+.chip[aria-pressed="true"]{background:#fff;color:#000;border-color:#fff}
+.detail{background:var(--s1);border:1px solid var(--line);padding:22px;min-height:260px}
+.detail h3{font-size:28px;margin:6px 0 10px}
+.tag{display:inline-block;border:1px solid #666;padding:1px 10px;font-size:12px;color:#bbb}
+.tag.d{background:#fff;color:#000;border-color:#fff}
+.tag.w{border-style:dashed;color:#fff}
+.meter{height:6px;background:#222;margin-top:16px}.meter i{display:block;height:100%;background:#fff}
+/* INCIDENTS */
+.list{display:grid;gap:1px;background:var(--line);border:1px solid var(--line)}
+.row{background:var(--s1);padding:18px 22px;display:grid;grid-template-columns:90px 1fr auto;gap:18px;align-items:start;cursor:pointer;border:0;color:inherit;text-align:left;font:inherit;width:100%}
+.row:hover{background:var(--s2)}
+.row .t{color:var(--mute);font-size:14px}
+.row h3{font-size:20px;margin-bottom:4px}
+.row p{margin:0;color:var(--mute);font-size:15px}
+/* WARNINGS */
+.warn{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.warn article{border:1px solid #555;padding:24px;background:linear-gradient(180deg,var(--s2),var(--s1))}
+.warn article:first-child{background:#fff;color:#111;border-color:#fff}
+.warn article:first-child h3{color:#000}
+.warn h3{font-size:26px;margin-bottom:8px}
+.warn p{margin:0}
+/* TIMELINE */
+.tl{position:relative;margin-left:8px;padding-left:34px;border-left:1px solid #555}
+.ev{position:relative;padding-bottom:36px}
+.ev::before{content:"";position:absolute;left:-41px;top:6px;width:14px;height:14px;background:var(--bg);border:2px solid #fff;border-radius:50%}
+.ev.big::before{background:#fff;box-shadow:0 0 0 6px #333}
+.ev time{color:var(--mute);font-size:14px}
+.ev h3{font-size:24px;margin:2px 0 4px}
+.ev p{margin:0;max-width:600px;color:#a9a9a9}
+/* FORM */
+form{display:grid;gap:14px;max-width:640px}
+label{display:grid;gap:6px;font-size:14px;color:var(--mute)}
+input,select,textarea{background:var(--s1);border:1px solid #444;color:var(--hi);padding:12px;font:16px "Libre Franklin",sans-serif;border-radius:0;width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.msg{min-height:22px;color:#fff}
+footer{padding:50px 0 70px;color:var(--mute);font-size:14px}
+footer .big{font:italic 500 clamp(28px,5vw,54px)/1.1 "Bodoni Moda",serif;color:#444;margin-bottom:18px}
+@media(max-width:820px){.mapgrid,.warn{grid-template-columns:1fr}.board{grid-template-columns:1fr 1fr}.row{grid-template-columns:1fr}.two{grid-template-columns:1fr}.moon{opacity:.45}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+/* ===== 3D + GLITCH LAYER (monochrome) ===== */
+.hero{perspective:1100px;--hx:0;--hy:0}
+.hero-in{transform-style:preserve-3d}
+.hero h1{transform-style:preserve-3d;transform:rotateY(calc(var(--hx)*9deg)) rotateX(calc(var(--hy)*-7deg)) translateZ(30px);transition:transform .25s ease-out;will-change:transform;
+text-shadow:calc((.6 - var(--hx))*1px) calc((.8 - var(--hy))*1px) 0 #bbb,calc((.6 - var(--hx))*2px) calc((.8 - var(--hy))*2px) 0 #a0a0a0,calc((.6 - var(--hx))*3px) calc((.8 - var(--hy))*3px) 0 #858585,calc((.6 - var(--hx))*4px) calc((.8 - var(--hy))*4px) 0 #6e6e6e,calc((.6 - var(--hx))*5px) calc((.8 - var(--hy))*5px) 0 #585858,calc((.6 - var(--hx))*6px) calc((.8 - var(--hy))*6px) 0 #444,calc((.6 - var(--hx))*7px) calc((.8 - var(--hy))*7px) 0 #333,calc((.6 - var(--hx))*8px) calc((.8 - var(--hy))*8px) 0 #222,calc((.6 - var(--hx))*14px) calc((.8 - var(--hy))*20px) 36px rgba(0,0,0,.9)}
+.hero h1 span{text-shadow:1px 1px 0 #2a2a2a,2px 2px 0 #202020,3px 3px 0 #161616,6px 10px 18px #000;transform:translateZ(-20px)}
+.hero p,.btns{transform:translateZ(10px)}
+.moon{transform:translate3d(calc(var(--hx)*-34px),calc(var(--hy)*-22px),0);transition:transform .3s ease-out;
+box-shadow:inset -48px -36px 90px rgba(0,0,0,.85),inset 14px 10px 40px rgba(255,255,255,.25),0 0 90px rgba(255,255,255,.12);overflow:hidden}
+.moon::before{content:"";position:absolute;inset:0;border-radius:50%;mix-blend-mode:multiply;opacity:.55;animation:spin 90s linear infinite;
+background:radial-gradient(circle at 30% 40%,#555 0 7%,transparent 8%),radial-gradient(circle at 62% 28%,#666 0 5%,transparent 6%),radial-gradient(circle at 55% 62%,#4a4a4a 0 9%,transparent 10%),radial-gradient(circle at 24% 70%,#666 0 4%,transparent 5%),radial-gradient(circle at 78% 58%,#555 0 6%,transparent 7%);background-size:140% 100%}
+@keyframes spin{to{background-position:140% 0}}
+.btn{transition:transform .15s,box-shadow .15s;box-shadow:0 1px 0 #999,0 2px 0 #777,0 3px 0 #555,0 4px 0 #333,0 8px 14px rgba(0,0,0,.7);display:inline-block}
+.btn:hover{transform:translateY(2px);box-shadow:0 1px 0 #999,0 2px 0 #555,0 4px 8px rgba(0,0,0,.7)}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 #333}
+.wall div{text-shadow:1px 1px 0 #999,2px 2px 0 #777,3px 3px 0 #555,4px 5px 6px rgba(0,0,0,.5)}
+/* tilt cards */
+main{perspective:1400px}
+.tilt{--rx:0deg;--ry:0deg;position:relative;transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));transition:transform .18s ease-out,box-shadow .2s;will-change:transform;
+box-shadow:1px 1px 0 #3a3a3a,2px 2px 0 #303030,3px 3px 0 #262626,4px 4px 0 #1c1c1c,10px 18px 30px rgba(0,0,0,.85)}
+.tilt::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .2s;background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.2),transparent 55%)}
+.tilt:hover{z-index:5;box-shadow:1px 1px 0 #555,2px 2px 0 #444,3px 3px 0 #333,4px 4px 0 #222,5px 5px 0 #1a1a1a,18px 30px 46px rgba(0,0,0,.95)}
+.tilt:hover::after{opacity:1}
+.mapbox.tilt{--rx:5deg;--ry:-3deg}
+.mapbox.tilt:hover{z-index:1}
+.row{transition:transform .2s,background .2s}
+.row:hover{transform:perspective(800px) translateZ(14px) rotateX(-1.5deg);position:relative;z-index:2;box-shadow:0 12px 24px rgba(0,0,0,.8)}
+.ev::before{box-shadow:1px 1px 0 #555,2px 2px 0 #333,3px 4px 6px #000}
+.board b,h2{text-shadow:1px 1px 0 #666,2px 2px 0 #444,3px 3px 0 #2a2a2a,4px 6px 10px rgba(0,0,0,.8)}
+.level strong,.warn article:first-child h3{text-shadow:none}
+/* scroll reveal */
+.rv{opacity:0;transform:perspective(900px) rotateX(16deg) translateY(36px) translateZ(-60px);transform-origin:50% 100%;transition:opacity .7s,transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+/* glitch (greyscale split only) */
+.gl{animation:gl .42s steps(2,end);position:relative}
+@keyframes gl{
+0%{text-shadow:3px 0 #fff,-3px 0 #666;transform:translate(0)}
+15%{text-shadow:-4px 1px #fff,4px -1px #555;transform:translate(-2px,1px) skewX(-6deg);clip-path:inset(10% 0 55% 0)}
+30%{text-shadow:5px 0 #ddd,-5px 0 #444;transform:translate(3px,-1px) skewX(5deg);clip-path:inset(55% 0 8% 0)}
+45%{text-shadow:-3px 0 #fff,3px 0 #777;transform:translate(-1px,0);clip-path:inset(0)}
+60%{text-shadow:6px 0 #999,-6px 0 #333;transform:translate(2px,1px) skewX(-4deg);clip-path:inset(30% 0 30% 0)}
+80%{text-shadow:-2px 0 #fff,2px 0 #555;transform:translate(0);clip-path:inset(0)}
+100%{text-shadow:none;transform:none;clip-path:none}}
+@media(hover:none){.tilt{transform:none}}
+@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.tilt,.hero h1,.moon{transform:none!important}.gl{animation:none!important}}
+/* ===== JUMPSCARE ===== */
+#scare{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:#000;overflow:hidden;cursor:pointer}
+#scare.on{display:flex}
+#scare::before{content:"";position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;animation:sflash .18s ease-out both}
+#scare .face,#scare svg{width:min(92vw,92vh);max-height:100vh;object-fit:contain;filter:grayscale(1) contrast(1.35);animation:szoom .22s cubic-bezier(.1,.9,.2,1) both,sshake .07s linear .22s 10}
+#scare svg{height:auto}
+#scare .cap{position:absolute;bottom:5vh;left:0;right:0;text-align:center;font:italic 500 clamp(20px,4vw,40px) "Bodoni Moda",serif;color:#fff;text-shadow:0 0 18px #000;animation:sfade .6s .3s both}
+@keyframes sflash{0%{opacity:1}100%{opacity:0}}
+@keyframes szoom{from{transform:scale(.15);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes sshake{0%{transform:translate(0,0)}25%{transform:translate(-6px,3px)}50%{transform:translate(5px,-4px)}75%{transform:translate(-4px,-3px)}100%{transform:translate(0,0)}}
+@keyframes sfade{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#scare::before{display:none}#scare .face,#scare svg{animation:sfade .6s both!important}}
+#scare-sw{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:10px;background:#000;color:#fff;border:1px solid #666;padding:9px 14px;font:13px "Libre Franklin",system-ui,sans-serif;cursor:pointer}
+#scare-sw:hover{border-color:#fff}
+#scare-sw:focus-visible{outline:2px solid #fff;outline-offset:2px}
+#scare-sw i{position:relative;width:30px;height:16px;border:1px solid #fff;background:#fff;display:block;transition:background .2s}
+#scare-sw i::after{content:"";position:absolute;top:2px;right:2px;width:10px;height:10px;background:#000;transition:right .2s}
+#scare-sw[aria-pressed="false"] i{background:#000}
+#scare-sw[aria-pressed="false"] i::after{right:16px;background:#777}
+#scare-sw[aria-pressed="false"]{color:#999;border-color:#444}
+
+/* ===== PANDIT HELPLINE (Instagram) ===== */
+#pandit{padding:80px 0 90px}
+.seal{position:relative;max-width:760px;margin:0 auto;padding:46px 34px 36px;text-align:center;background:linear-gradient(180deg,var(--s2),var(--s1));border:1px solid #555;outline:1px solid #333;outline-offset:8px}
+.seal::before,.seal::after{content:"";position:absolute;width:22px;height:22px;border:2px solid #fff;pointer-events:none}
+.seal::before{top:-1px;left:-1px;border-right:0;border-bottom:0}
+.seal::after{bottom:-1px;right:-1px;border-left:0;border-top:0}
+.seal .stamp{display:inline-block;border:1px dashed #777;padding:2px 14px;font-size:13px;color:#bbb;letter-spacing:.12em;text-transform:uppercase;margin-bottom:18px}
+.seal h2{font-size:clamp(30px,5.4vw,54px);margin-bottom:10px}
+.seal h2 em{font-weight:500;color:#666}
+.seal .lead{margin:0 auto 30px;max-width:480px}
+.pandit-btn{position:relative;display:inline-flex;align-items:center;gap:14px;background:#fff;color:#000;text-decoration:none;padding:16px 30px 16px 22px;border:1px solid #fff;font:600 17px "Libre Franklin",sans-serif;box-shadow:6px 6px 0 #333;transition:transform .15s,box-shadow .15s,background .15s,color .15s}
+.pandit-btn svg{width:28px;height:28px;flex:none;display:block}
+.pandit-btn .h{font-family:"Special Elite","Courier New",monospace;font-size:19px;letter-spacing:.02em}
+.pandit-btn:hover{transform:translate(3px,3px);box-shadow:3px 3px 0 #555}
+.pandit-btn:active{transform:translate(6px,6px);box-shadow:0 0 0 #555}
+.pandit-btn::before{content:"";position:absolute;inset:-9px;border:1px solid #fff;opacity:0;animation:psp 2.6s infinite;pointer-events:none}
+@keyframes psp{from{transform:scale(.96);opacity:.7}to{transform:scale(1.06);opacity:0}}
+.seal .cap{margin:26px auto 0;max-width:460px;color:var(--mute);font-size:15px}
+.seal .cap b{color:var(--hi);font-weight:600}
+.seal .fine{margin-top:14px;font-size:12px;color:#555;letter-spacing:.06em}
+@media(max-width:520px){.seal{padding:38px 20px 30px;outline-offset:6px}.pandit-btn{padding:14px 20px 14px 16px;font-size:15px}.pandit-btn .h{font-size:16px}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="moon" aria-hidden="true"></div>
+  <div class="wrap top type">
+    <span>Chanderi Town Alert Portal · Unofficial, fictional</span>
+    <span class="status"><i class="dot"></i> Festive nights in effect</span>
+  </div>
+  <div class="wrap hero-in">
+    <h1>O Stree,<span>kal aana.</span></h1>
+    <p>Tonight the lanes of Chanderi empty early. Read the reports, check the map, and be indoors before the lamps go out. Her name is never to be called after dark.</p>
+    <div class="btns"><a class="btn" href="#map">Open the night map</a><a class="btn g" href="#report">File a report</a></div>
+  </div>
+</header>
+
+<div class="wall" aria-hidden="true"><div>O STREE, KAL AANA &nbsp;·&nbsp; O STREE, KAL AANA &nbsp;·&nbsp; O STREE, KAL AANA &nbsp;·&nbsp; O STREE, KAL AANA &nbsp;·&nbsp; O STREE, KAL AANA &nbsp;·&nbsp; O STREE, KAL AANA &nbsp;·&nbsp; O STREE, KAL AANA &nbsp;·&nbsp; O STREE, KAL AANA &nbsp;·&nbsp;</div></div>
+
+<main>
+<section id="board"><div class="wrap">
+  <h2>Tonight’s standing</h2>
+  <p class="lead">Counts update as residents file reports. Everything below is fiction, built for a story, not a real emergency.</p>
+  <div class="board">
+    <div class="level"><div class="type">Town alert level</div><strong>Level 4 — Stay indoors after sundown</strong><div class="type" id="clock">Midnight in --:--:--</div></div>
+    <div><b id="n-all">0</b><small>Incidents logged</small></div>
+    <div><b id="n-dis">0</b><small>Disappearances</small></div>
+    <div><b id="n-sig">0</b><small>Sightings</small></div>
+    <div><b id="n-war">0</b><small>Active warnings</small></div>
+  </div>
+</div></section>
+
+<section id="map"><div class="wrap">
+  <h2>The night map of Chanderi</h2>
+  <p class="lead">A hand-drawn schematic of the old town: the fort on the hill, the Kati Ghati gateway, the lake, the bazaar and the lanes between. Tap a pin to read its report.</p>
+  <div class="filters" role="group" aria-label="Filter pins">
+    <button class="chip" data-f="all" aria-pressed="true">All</button>
+    <button class="chip" data-f="disappearance" aria-pressed="false">Disappearances</button>
+    <button class="chip" data-f="sighting" aria-pressed="false">Sightings</button>
+    <button class="chip" data-f="warning" aria-pressed="false">Warnings</button>
+  </div>
+  <div class="mapgrid">
+    <div class="mapbox">
+      <svg id="svg" viewBox="0 0 700 520" role="img" aria-label="Schematic map of Chanderi">
+        <defs>
+          <pattern id="gr" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#1b1b1b" stroke-width="1"/></pattern>
+          <radialGradient id="lk"><stop offset="0" stop-color="#2e2e2e"/><stop offset="1" stop-color="#151515"/></radialGradient>
+          <radialGradient id="vg" cx=".5" cy=".5" r=".7"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".85"/></radialGradient>
+        </defs>
+        <rect width="700" height="520" fill="#0a0a0a"/><rect width="700" height="520" fill="url(#gr)"/>
+        <!-- hills -->
+        <path d="M0 0H700V70C620 40 560 90 480 60S300 20 210 70 60 60 0 90Z" fill="#141414"/>
+        <path d="M0 460C90 430 170 480 260 455S430 490 520 462 640 470 700 450V520H0Z" fill="#111"/>
+        <!-- Kati Ghati gateway road N -->
+        <path d="M350 0V150" stroke="#333" stroke-width="10"/><path d="M350 0V150" stroke="#555" stroke-width="1" stroke-dasharray="6 8"/>
+        <!-- main roads -->
+        <g fill="none" stroke="#2f2f2f" stroke-width="8" stroke-linecap="round">
+          <path d="M350 150C350 230 340 280 330 340S300 440 290 520"/>
+          <path d="M120 250C200 260 270 270 330 270S470 250 560 240 650 250 700 255"/>
+          <path d="M200 120C220 190 250 230 330 270"/>
+          <path d="M560 240C570 320 560 400 520 470"/>
+        </g>
+        <g fill="none" stroke="#202020" stroke-width="3">
+          <path d="M260 300C300 310 340 305 400 310S480 330 540 340"/><path d="M270 340C300 380 340 400 380 400S440 380 470 360"/>
+          <path d="M395 190C420 220 450 230 520 240"/><path d="M150 330C190 340 230 330 260 300"/><path d="M400 310V400"/><path d="M300 200C330 215 360 210 395 190"/>
+        </g>
+        <!-- fort -->
+        <g transform="translate(150,70)"><path d="M0 40L18 10 60 0 110 8 140 34 120 62 60 70 15 62Z" fill="#1d1d1d" stroke="#6a6a6a" stroke-width="1.5"/><path d="M14 40H126M40 14V64M90 8V66" stroke="#3a3a3a"/><rect x="52" y="26" width="24" height="18" fill="#2e2e2e" stroke="#777"/></g>
+        <text class="lab k" x="170" y="165">Chanderi Fort</text>
+        <!-- Kati Ghati -->
+        <path d="M322 50V92M378 50V92M322 50H378" stroke="#888" stroke-width="6" fill="none"/><path d="M322 92Q350 60 378 92" fill="none" stroke="#888" stroke-width="3"/>
+        <text class="lab k" x="388" y="62">Kati Ghati Gate</text>
+        <!-- lake -->
+        <ellipse cx="560" cy="150" rx="88" ry="48" fill="url(#lk)" stroke="#555"/>
+        <path d="M510 150q14-8 28 0t28 0 28 0" fill="none" stroke="#444"/>
+        <text class="lab k" x="512" y="212">Parmeshwar Tal</text>
+        <!-- Jama masjid -->
+        <g transform="translate(220,205)"><rect width="50" height="28" fill="#1d1d1d" stroke="#777"/><path d="M8 28V12Q14 4 20 12V28M30 28V12Q36 4 42 12V28" fill="none" stroke="#777"/></g>
+        <text class="lab" x="204" y="250">Jama Masjid</text>
+        <!-- bazaar -->
+        <g fill="#1e1e1e" stroke="#555"><rect x="290" y="285" width="34" height="18"/><rect x="334" y="285" width="34" height="18"/><rect x="378" y="285" width="34" height="18"/><rect x="290" y="312" width="34" height="18"/><rect x="334" y="312" width="34" height="18"/><rect x="378" y="312" width="34" height="18"/></g>
+        <text class="lab k" x="296" y="350">Handloom Bazaar</text>
+        <!-- koshak mahal -->
+        <g transform="translate(460,300)"><rect width="42" height="42" fill="#1d1d1d" stroke="#777"/><rect x="10" y="10" width="22" height="22" fill="none" stroke="#555"/></g>
+        <text class="lab" x="446" y="362">Koshak Mahal</text>
+        <!-- Badal Mahal -->
+        <g transform="translate(270,420)"><path d="M0 50V0M70 50V0M0 0H70" stroke="#888" stroke-width="6" fill="none"/><path d="M0 20Q35-10 70 20" stroke="#888" stroke-width="3" fill="none"/></g>
+        <text class="lab k" x="268" y="488">Badal Mahal Gateway</text>
+        <!-- Shahzadi ka Rauza / Rani mahal -->
+        <g transform="translate(95,370)"><rect width="34" height="34" fill="#1d1d1d" stroke="#777"/><path d="M5 17h24M17 5v24" stroke="#555"/></g>
+        <text class="lab" x="70" y="418">Shahzadi ka Rauza</text>
+        <!-- cremation / old well -->
+        <circle cx="610" cy="400" r="14" fill="#111" stroke="#777"/><circle cx="610" cy="400" r="6" fill="#000"/>
+        <text class="lab" x="574" y="434">Old Baoli</text>
+        <!-- compass -->
+        <g transform="translate(46,48)" stroke="#888" fill="none"><circle r="22"/><path d="M0 -20V20M-20 0H20" stroke="#444"/><path d="M0 -20L5 0H-5Z" fill="#ddd" stroke="none"/><text x="-4" y="-28" fill="#aaa" stroke="none" font-size="11" font-family="Special Elite,monospace">N</text></g>
+        <g id="pins"></g>
+        <rect width="700" height="520" fill="url(#vg)" pointer-events="none"/>
+      </svg>
+    </div>
+    <aside class="detail" id="detail" aria-live="polite"><span class="tag">Select a pin</span><h3>Nothing selected</h3><p style="color:var(--mute)">Choose a location on the map or an incident from the log to read what residents saw.</p></aside>
+  </div>
+</div></section>
+
+<section id="log"><div class="wrap">
+  <h2>Incident log</h2>
+  <p class="lead">Latest first. Select a report to find it on the map.</p>
+  <div class="list" id="list"></div>
+</div></section>
+
+<section id="warnings"><div class="wrap">
+  <h2>Warnings from the elders</h2>
+  <p class="lead">Followed by every household. Ignored by every outsider, once.</p>
+  <div class="warn">
+    <article><h3>Write it on your door</h3><p class="type">“O Stree, kal aana.” Paint it at the gate before dusk. She reads, and she turns away.</p></article>
+    <article><h3>Never walk alone</h3><p>She follows lone men through the lanes. Travel in groups and stay on lit roads.</p></article>
+    <article><h3>Do not look back</h3><p>If someone calls your name from behind, keep walking. Do not answer. Do not turn.</p></article>
+  </div>
+</div></section>
+
+<section id="timeline"><div class="wrap">
+  <h2>Timeline of events</h2>
+  <p class="lead">Four nights of the festival, as residents remember them.</p>
+  <div class="tl" id="tl"></div>
+</div></section>
+
+<section id="report"><div class="wrap">
+  <h2>File a report</h2>
+  <p class="lead">Saw something? Describe it and drop a pin on the map. Reports stay in this browser tab.</p>
+  <form id="form">
+    <div class="two">
+      <label>Type<select id="f-type"><option value="sighting">Sighting</option><option value="disappearance">Disappearance</option><option value="warning">Warning</option></select></label>
+      <label>Location<select id="f-loc"></select></label>
+    </div>
+    <label>Title<input id="f-title" required maxlength="60" placeholder="A woman in white near the lamp post"></label>
+    <label>What happened?<textarea id="f-desc" rows="4" required maxlength="300" placeholder="Time, what you saw, what you heard."></textarea></label>
+    <button class="btn" type="submit">Submit report</button>
+    <div class="msg" id="msg" role="status"></div>
+  </form>
+</div></section>
+
+<section id="pandit"><div class="wrap">
+  <div class="seal rv">
+    <div class="stamp type">Emergency · Chanderi helpline</div>
+    <h2>Seen her yet? <em>Call the pandit.</em></h2>
+    <p class="lead">If the lamp post flickers, the door knocks twice and the writing on the wall says “O Stree, Kal Aana” &mdash; press below.</p>
+    <a class="pandit-btn" href="https://www.instagram.com/kapidhwaj.innovations/" target="_blank" rel="noopener noreferrer" aria-label="Open Instagram page @kapidhwaj.innovations in a new tab">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor"/></svg>
+      <span class="h">@kapidhwaj.innovations</span>
+    </a>
+    <p class="cap type">&#8595; <b>This button helps you locate your nearest pandit for exorcism.</b></p>
+    <div class="fine type">Results may vary. Do not knock back after dark.</div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="big">Wake the town. Don’t wake her.</div>
+  A fan-made, fictional project inspired by the film Stree. Locations are a schematic of Chanderi, not a survey map.
+</div></footer>
+
+<script>
+const LOCS={
+ fort:{n:"Chanderi Fort",x:220,y:110},kati:{n:"Kati Ghati Gate",x:350,y:78},lake:{n:"Parmeshwar Tal",x:560,y:150},
+ masjid:{n:"Jama Masjid",x:245,y:218},bazaar:{n:"Handloom Bazaar",x:350,y:308},koshak:{n:"Koshak Mahal",x:481,y:322},
+ badal:{n:"Badal Mahal Gateway",x:305,y:450},rauza:{n:"Shahzadi ka Rauza",x:112,y:388},baoli:{n:"Old Baoli",x:610,y:400}
+};
+const D=[
+ {id:1,t:"12:42 AM",type:"sighting",loc:"bazaar",title:"A woman in red at the loom shops",desc:"Shutters were down, yet a weaver swears he heard bangles and soft footsteps pass three times. The lamp over the cloth stall went out by itself.",sev:70},
+ {id:2,t:"11:15 PM",type:"disappearance",loc:"badal",title:"Man missing near Badal Mahal",desc:"Last seen walking alone toward the gateway. Only his clothes were found folded at the base of the arch, still warm.",sev:95},
+ {id:3,t:"10:40 PM",type:"warning",loc:"kati",title:"Gate patrol turned back",desc:"Two guards refused to leave the Kati Ghati post after a voice called their names from the empty road. Walls here now carry the old message.",sev:55},
+ {id:4,t:"9:30 PM",type:"sighting",loc:"lake",title:"Reflection with no figure",desc:"Fishermen at Parmeshwar Tal reported a woman’s reflection on the water, with nobody standing on the bank.",sev:60},
+ {id:5,t:"Yesterday",type:"disappearance",loc:"masjid",title:"Two friends vanish after the evening gathering",desc:"They left together near Jama Masjid. One scarf was found hanging from a gate, swaying without wind.",sev:90},
+ {id:6,t:"Yesterday",type:"warning",loc:"fort",title:"Lights seen on the fort wall",desc:"A slow lantern moved along the ramparts at 1 AM. The fort is closed, and the guard’s keys are unmoved.",sev:50},
+ {id:7,t:"2 nights ago",type:"sighting",loc:"baoli",title:"Whispers from the old baoli",desc:"A herder heard his own name from the well. His goats would not cross the lane afterwards.",sev:65},
+ {id:8,t:"3 nights ago",type:"warning",loc:"rauza",title:"Door markings erased overnight",desc:"Three houses near Shahzadi ka Rauza woke to find their painted warnings scratched away. Repaint at once.",sev:75},
+ {id:9,t:"3 nights ago",type:"sighting",loc:"koshak",title:"Footprints without a visitor",desc:"Bare footprints crossed the courtyard of Koshak Mahal and stopped mid-step at the central pillar.",sev:45}
+];
+const TL=[
+ {t:"Night 1",h:"The lamps go quiet",p:"Festival drums begin. By midnight the lanes are empty and one man does not reach home.",big:0},
+ {t:"Night 2",h:"First sightings",p:"A red-clad woman is reported at the loom shops and at the lake. Elders order the gate writing renewed.",big:0},
+ {t:"Night 3",h:"Markings erased",p:"Warnings at several doors vanish. Two disappearances in a single night, the worst in years.",big:1},
+ {t:"Night 4",h:"The final night",p:"The town gathers indoors. A call goes out for a safe way to hold her off before the festival ends.",big:1},
+ {t:"After midnight",h:"The twist: she is only sleeping",p:"Residents say she wakes at 12:42. Until then, do not speak her name.",big:1}
+];
+const T={disappearance:"Disappearance",sighting:"Sighting",warning:"Warning"};
+let filter="all",sel=null,nid=100;
+const $=s=>document.querySelector(s);
+function pinsFor(){return D.filter(d=>filter==="all"||d.type===filter)}
+function draw(){
+  const g=$("#pins");g.innerHTML="";
+  const off={};
+  pinsFor().forEach(d=>{
+    const L=LOCS[d.loc];off[d.loc]=(off[d.loc]||0)+1;const k=off[d.loc]-1;
+    const x=L.x+k*20,y=L.y-k*6;
+    const e=document.createElementNS("http://www.w3.org/2000/svg","g");
+    e.setAttribute("class","pin");e.setAttribute("tabindex","0");e.setAttribute("role","button");
+    e.setAttribute("aria-label",T[d.type]+": "+d.title);
+    const dis=d.type==="disappearance",war=d.type==="warning";
+    e.innerHTML=(sel===d.id?'<circle class="ring" cx="'+x+'" cy="'+y+'" r="9"/>':'<circle class="ring" cx="'+x+'" cy="'+y+'" r="9"/>')+
+     '<circle class="h" cx="'+x+'" cy="'+y+'" r="'+(sel===d.id?11:8)+'" fill="'+(dis?'#fff':war?'#0a0a0a':'#777')+'" stroke="#fff" stroke-width="'+(war?2:1.5)+'" '+(war?'stroke-dasharray="3 2"':'')+'/>'+
+     (dis?'<path d="M'+(x-3.5)+' '+(y-3.5)+'L'+(x+3.5)+' '+(y+3.5)+'M'+(x+3.5)+' '+(y-3.5)+'L'+(x-3.5)+' '+(y+3.5)+'" stroke="#000" stroke-width="2"/>':'');
+    e.onclick=()=>pick(d.id);e.onkeydown=ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();pick(d.id)}};
+    g.appendChild(e);
+  });
+}
+function list(){
+  $("#list").innerHTML=pinsFor().map(d=>'<button class="row" data-id="'+d.id+'"><span class="t type">'+d.t+'</span><span><h3>'+esc(d.title)+'</h3><p>'+LOCS[d.loc].n+' — '+esc(d.desc).slice(0,110)+'…</p></span><span class="tag '+(d.type==="disappearance"?"d":d.type==="warning"?"w":"")+'">'+T[d.type]+'</span></button>').join("")||'<div class="row">No reports match this filter yet. Be the first to file one.</div>';
+  document.querySelectorAll(".row[data-id]").forEach(b=>b.onclick=()=>{pick(+b.dataset.id);$("#map").scrollIntoView()});
+}
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function pick(id){
+  sel=id;const d=D.find(x=>x.id===id);if(!d)return;
+  $("#detail").innerHTML='<span class="tag '+(d.type==="disappearance"?"d":d.type==="warning"?"w":"")+'">'+T[d.type]+'</span> <span class="type" style="color:var(--mute);font-size:14px">'+d.t+'</span><h3>'+esc(d.title)+'</h3><p style="margin:0 0 8px;color:var(--mute)">'+LOCS[d.loc].n+'</p><p>'+esc(d.desc)+'</p><small class="type" style="color:var(--mute)">Danger rating</small><div class="meter"><i style="width:'+d.sev+'%"></i></div>';
+  draw();
+}
+function stats(){
+  $("#n-all").textContent=D.length;
+  $("#n-dis").textContent=D.filter(d=>d.type==="disappearance").length;
+  $("#n-sig").textContent=D.filter(d=>d.type==="sighting").length;
+  $("#n-war").textContent=D.filter(d=>d.type==="warning").length;
+}
+document.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{
+  filter=c.dataset.f;document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===c));draw();list();
+});
+$("#f-loc").innerHTML=Object.entries(LOCS).map(([k,v])=>'<option value="'+k+'">'+v.n+'</option>').join("");
+$("#form").onsubmit=e=>{
+  e.preventDefault();
+  D.unshift({id:nid++,t:"Just now",type:$("#f-type").value,loc:$("#f-loc").value,title:$("#f-title").value.trim(),desc:$("#f-desc").value.trim(),sev:60});
+  e.target.reset();stats();draw();list();pick(D[0].id);
+  $("#msg").textContent="Report filed. Your pin is on the map.";
+  $("#map").scrollIntoView();
+};
+$("#tl").innerHTML=TL.map(e=>'<div class="ev'+(e.big?' big':'')+'"><time class="type">'+e.t+'</time><h3>'+e.h+'</h3><p>'+e.p+'</p></div>').join("");
+function tick(){
+  const n=new Date(),m=new Date(n);m.setHours(24,0,0,0);
+  let s=Math.floor((m-n)/1000);const p=v=>String(v).padStart(2,"0");
+  $("#clock").textContent="Midnight in "+p(Math.floor(s/3600))+":"+p(Math.floor(s%3600/60))+":"+p(s%60);
+}
+tick();setInterval(tick,1000);stats();draw();list();pick(2);
+</script>
+<script>
+(function(){
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const fine=matchMedia("(hover:hover) and (pointer:fine)").matches;
+/* hero parallax */
+const hero=document.querySelector(".hero");
+if(hero&&fine&&!reduce){
+  hero.addEventListener("mousemove",e=>{const r=hero.getBoundingClientRect();
+    hero.style.setProperty("--hx",((e.clientX-r.left)/r.width*2-1).toFixed(3));
+    hero.style.setProperty("--hy",((e.clientY-r.top)/r.height*2-1).toFixed(3));});
+  hero.addEventListener("mouseleave",()=>{hero.style.setProperty("--hx",0);hero.style.setProperty("--hy",0)});
+}
+/* card tilt */
+if(fine&&!reduce){
+  document.querySelectorAll(".board>div,.warn article,.detail,.mapbox").forEach(el=>{
+    el.classList.add("tilt");
+    const max=el.classList.contains("mapbox")?4:9;
+    el.addEventListener("mousemove",e=>{const r=el.getBoundingClientRect();
+      const px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;
+      el.style.setProperty("--ry",((px-.5)*2*max).toFixed(2)+"deg");
+      el.style.setProperty("--rx",((.5-py)*2*max).toFixed(2)+"deg");
+      el.style.setProperty("--mx",(px*100)+"%");el.style.setProperty("--my",(py*100)+"%");});
+    el.addEventListener("mouseleave",()=>{["--rx","--ry"].forEach(p=>el.style.removeProperty(p))});
+  });
+}
+/* scroll reveal */
+if(!reduce&&"IntersectionObserver" in window){
+  const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){x.target.classList.add("in");io.unobserve(x.target)}}),{threshold:.12});
+  document.querySelectorAll("section .wrap > *").forEach(el=>{el.classList.add("rv");io.observe(el)});
+}
+/* text glitch on hover */
+const SEL="h1,h2,h3,p,.btn,.chip,.tag,.board b,.board small,.top span,.ev time,.row .t,label,.big,.kick,.lab,.wall div";
+const GLY="█▓▒░/\\|<>#@!?%&01";
+const walk=el=>{const out=[],w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT);let n;
+  while(n=w.nextNode()){const p=n.parentNode;
+    if(/^(OPTION|SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName)||p.closest("#clock"))continue;
+    if(n.nodeValue.trim())out.push([n,n.nodeValue])}
+  return out};
+function glitch(el){
+  if(el._g)return;el._g=1;
+  const nodes=walk(el);
+  el.classList.remove("gl");void el.offsetWidth;el.classList.add("gl");
+  if(reduce){setTimeout(()=>{el.classList.remove("gl");el._g=0},450);return}
+  let f=0;const total=11;
+  const iv=setInterval(()=>{f++;
+    nodes.forEach(([n,o])=>{n.nodeValue=[...o].map((c,i)=>/\s/.test(c)||i<o.length*(f/total)&&Math.random()>.3?c:GLY[Math.random()*GLY.length|0]).join("")});
+    if(f>=total){clearInterval(iv);nodes.forEach(([n,o])=>n.nodeValue=o);el.classList.remove("gl");el._g=0}
+  },40);
+}
+document.addEventListener("pointerdown",e=>{if(e.pointerType==="mouse")return;const el=e.target.closest&&e.target.closest(SEL);if(el)glitch(el)});
+document.addEventListener("mouseover",e=>{
+  if(!fine)return;
+  const el=e.target.closest&&e.target.closest(SEL);
+  if(el&&!el.contains(e.relatedTarget))glitch(el);
+});
+})();
+</script>
+<button id="scare-sw" type="button" aria-pressed="true" aria-label="Jumpscare switch"><span id="scare-sw-t">Jumpscare on</span><i></i></button>
+<div id="scare" role="alertdialog" aria-label="Jumpscare. Click or press Escape to close." hidden>
+  <img class="face" id="scare-img" src="images/stree.jpg" alt="">
+  <svg id="scare-fb" viewBox="0 0 400 480" hidden aria-hidden="true">
+    <rect width="400" height="480" fill="#000"/>
+    <path d="M60 480C40 300 70 90 200 60S360 300 340 480Z" fill="#0c0c0c" stroke="#222"/>
+    <ellipse cx="200" cy="230" rx="88" ry="118" fill="#d8d8d8"/>
+    <path d="M110 200C120 120 280 120 290 200C260 160 140 160 110 200Z" fill="#050505"/>
+    <ellipse cx="165" cy="225" rx="19" ry="26" fill="#000"/><ellipse cx="235" cy="225" rx="19" ry="26" fill="#000"/>
+    <path d="M170 330Q200 360 230 330Q200 372 170 330Z" fill="#000"/>
+  </svg>
+  <div class="cap">O Stree, kal aana.</div>
+</div>
+<script>
+/* Jumpscare: shows on load, then every 30 seconds. Click or Esc closes it. */
+(function(){
+  const INTERVAL=30000, SHOW_FOR=2600;
+  const box=document.getElementById("scare"),img=document.getElementById("scare-img"),fb=document.getElementById("scare-fb");
+  let hideT=null,ctx=null,on=true;
+  try{on=localStorage.getItem("scareOff")!=="1"}catch(e){}
+  img.addEventListener("error",()=>{img.hidden=true;fb.hidden=false});
+  function scream(){
+    if(window.HX){HX.scream();return}
+    try{
+      ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
+      if(ctx.state==="suspended")ctx.resume();
+      const t=ctx.currentTime,g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(1,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+1.3);g.connect(ctx.destination);
+      [620,930,1410,2100].forEach((f,i)=>{const o=ctx.createOscillator();o.type=i?"square":"sawtooth";o.frequency.setValueAtTime(f,t);o.frequency.exponentialRampToValueAtTime(f*1.9,t+.9);o.connect(g);o.start(t);o.stop(t+1.3)});
+      const b=ctx.createBuffer(1,ctx.sampleRate*1.2,ctx.sampleRate),d=b.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+      const n=ctx.createBufferSource();n.buffer=b;n.connect(g);n.start(t);
+    }catch(e){}
+  }
+  function show(){
+    if(!on||box.classList.contains("on"))return;
+    box.hidden=false;box.classList.remove("on");void box.offsetWidth;box.classList.add("on");
+    scream();clearTimeout(hideT);hideT=setTimeout(hide,SHOW_FOR);
+  }
+  function hide(){clearTimeout(hideT);box.classList.remove("on");box.hidden=true}
+  box.addEventListener("click",hide);
+  addEventListener("keydown",e=>{if(e.key==="Escape")hide()});
+  /* corner switch: turns the jumpscare on or off (remembered on this device) */
+  const sw=document.getElementById("scare-sw"),swt=document.getElementById("scare-sw-t");
+  function paint(){sw.setAttribute("aria-pressed",on);swt.textContent=on?"Jumpscare on":"Jumpscare off"}
+  sw.addEventListener("click",()=>{on=!on;try{localStorage.setItem("scareOff",on?"0":"1")}catch(e){}if(!on)hide();paint()});
+  paint();
+  /* first scare as soon as the page opens, then every 30 seconds */
+  window.__scare=show;
+  /* browsers block sound until the visitor interacts once; unlock audio on first touch */
+  ["pointerdown","keydown"].forEach(ev=>addEventListener(ev,()=>{try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();ctx.resume()}catch(e){}},{once:true}));
+})();
+</script>
+<!-- ===== HORROR PACK: gate, flashlight, eyes, procedural music + SFX + screams (all grayscale) ===== -->
+<style>
+body.gated{overflow:hidden}
+#gate{position:fixed;inset:0;z-index:10000;background:#000;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+#gate[hidden]{display:none}
+#gate h1{font-size:clamp(40px,10vw,110px);line-height:.9;animation:gtl 3s infinite steps(1)}
+@keyframes gtl{0%,92%{text-shadow:none;transform:none}93%{text-shadow:5px 0 #fff,-5px 0 #555;transform:translateX(3px) skewX(-6deg)}96%{text-shadow:-4px 0 #aaa,4px 0 #444;transform:translateX(-3px)}}
+#gate p{max-width:460px;margin:18px auto 26px;color:#8a8a8a}
+#gate .btns{justify-content:center}
+#dark{position:fixed;inset:0;z-index:40;pointer-events:none;background:radial-gradient(circle 300px at var(--fx,50%) var(--fy,45%),transparent 0,rgba(0,0,0,.3) 45%,rgba(0,0,0,.82) 100%)}
+#dark.blk{background:#000}
+#eyes{position:fixed;z-index:45;pointer-events:none;display:flex;gap:16px;opacity:0;transition:opacity .35s}
+#eyes i{width:16px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 14px 4px rgba(255,255,255,.55);transition:transform .08s}
+#eyes.on{opacity:.9}#eyes.bl i{transform:scaleY(.08)}
+#ghost{position:fixed;z-index:46;pointer-events:none;opacity:0;color:#ddd;font:italic 500 40px "Bodoni Moda",serif;white-space:nowrap;mix-blend-mode:difference}
+#ghost.go{animation:gh 1.7s ease-out both}
+@keyframes gh{0%{opacity:0;filter:blur(10px);transform:scale(1.2)}20%{opacity:.8;filter:blur(1px)}60%{opacity:.5;filter:blur(2px)}100%{opacity:0;filter:blur(12px);transform:scale(.95)}}
+.shake main,.shake .hero,.shake footer{animation:bsh .08s linear 9}
+@keyframes bsh{25%{transform:translate(-7px,3px)}50%{transform:translate(6px,-4px)}75%{transform:translate(-4px,-3px)}}
+#scare .face,#scare svg{filter:grayscale(1) contrast(1.7) brightness(1.1);animation:szoom .15s cubic-bezier(.1,.9,.2,1) both,sshake .05s linear .15s 34,sinv .3s steps(1) .2s 6}
+@keyframes sinv{50%{filter:grayscale(1) invert(1) contrast(1.7)}}
+#scare::after{content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;background:repeating-linear-gradient(0deg,rgba(255,255,255,.1) 0 1px,transparent 1px 3px);animation:snz .1s steps(2) infinite}
+@keyframes snz{50%{transform:translate(-3px,2px)}}
+#sc2{position:fixed;inset:0;z-index:9998;display:none;background:#000;align-items:center;justify-content:center;overflow:hidden;cursor:pointer}
+#sc2.on{display:flex}#sc2.clear{background:rgba(0,0,0,.3)}
+#sc2 .f{width:min(92vw,92vh);height:auto;filter:grayscale(1) contrast(1.6);animation:szoom .15s cubic-bezier(.1,.9,.2,1) both,sshake .05s linear .15s 50,sinv .3s steps(1) .2s 9}
+#sc2 .hang{position:absolute;top:0;left:50%;width:min(62vw,380px);margin-left:calc(min(62vw,380px)/-2);transform-origin:50% 0;animation:drop .2s cubic-bezier(.2,1.4,.4,1) both,sw 1.1s ease-in-out .2s infinite alternate}
+@keyframes drop{from{transform:translateY(-110%)}to{transform:none}}
+@keyframes sw{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+#sc2 .eyz{display:flex;gap:6vw;animation:eg 1.1s cubic-bezier(.5,0,1,.6) both}
+#sc2 .eyz i{width:12vw;height:5vw;border-radius:50%;background:#fff;box-shadow:0 0 6vw 2vw rgba(255,255,255,.6)}
+@keyframes eg{from{transform:scale(.1);opacity:.2}to{transform:scale(5);opacity:1}}
+#sc2 .tv{position:absolute;inset:0;background:repeating-linear-gradient(0deg,#fff 0 2px,#000 2px 5px);opacity:.5;animation:tvn .08s steps(2) infinite}
+@keyframes tvn{50%{background-position:0 3px;filter:contrast(2)}}
+#sc2 .big{position:relative;font:900 clamp(40px,12vw,150px)/1 "Bodoni Moda",serif;color:#fff;mix-blend-mode:difference;text-align:center;animation:sshake .05s linear infinite}
+#sc2 .cr{position:absolute;inset:0;width:100%;height:100%;animation:sshake .06s linear .1s 14}
+#sc2 .fl{position:absolute;inset:0;background:#fff;animation:sflash .3s ease-out both}
+@media(prefers-reduced-motion:reduce){#sc2 *{animation:none!important}}
+#snd-sw{position:fixed;left:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;align-items:center;gap:10px;background:#000;color:#fff;border:1px solid #666;padding:9px 14px;font:13px "Libre Franklin",system-ui,sans-serif;cursor:pointer}
+#snd-sw[aria-pressed="false"]{color:#999;border-color:#444}
+@media(prefers-reduced-motion:reduce){#gate h1,#ghost.go,.shake main,.shake .hero,.shake footer,#scare::after{animation:none!important}}
+</style>
+<div id="dark" aria-hidden="true"></div>
+<div id="eyes" aria-hidden="true"><i></i><i></i></div>
+<div id="ghost" aria-hidden="true"></div>
+<button id="snd-sw" type="button" aria-pressed="true"><span id="snd-t">Sound on</span></button>
+<div id="gate" role="dialog" aria-label="Content warning">
+  <div><h1>Chanderi<br>Night Watch</h1>
+  <p class="type">Contains sudden loud sounds, screams and flashing light. Headphones on, volume low to start: the screams are LOUD. Her name is never to be called after dark.</p>
+  <div class="btns"><button class="btn" id="g-on" type="button">Enter the night (sound on)</button><button class="btn g" id="g-off" type="button">Enter silently</button></div></div>
+</div>
+<script>
+(function(){
+"use strict";
+const reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+const $=s=>document.querySelector(s),R=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.random()*a.length|0];
+let ctx,master,wet,nb,started=false,muted=true,hb=false,evT,bpm=60;
+const HX=window.HX={};
+document.body.classList.add("gated");
+
+function init(){
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+  ctx=new AC();
+  const comp=ctx.createDynamicsCompressor();master=ctx.createGain();master.gain.value=1;master.connect(comp);comp.connect(ctx.destination);
+  const dl=ctx.createDelay(1),fb=ctx.createGain(),lp=ctx.createBiquadFilter();
+  dl.delayTime.value=.41;fb.gain.value=.5;lp.type="lowpass";lp.frequency.value=1600;
+  wet=ctx.createGain();wet.connect(dl);dl.connect(lp);lp.connect(fb);fb.connect(dl);lp.connect(master);
+  nb=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);
+  const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  return true;
+}
+function out(n,send,pan){
+  let x=n;
+  if(pan!=null&&ctx.createStereoPanner){const p=ctx.createStereoPanner();p.pan.value=pan;n.connect(p);x=p}
+  x.connect(master);
+  if(send){const s=ctx.createGain();s.gain.value=send;x.connect(s);s.connect(wet)}
+}
+function noise(t,dur,type,f,q){
+  const s=ctx.createBufferSource();s.buffer=nb;s.loop=true;
+  const b=ctx.createBiquadFilter();b.type=type;b.frequency.value=f;b.Q.value=q||1;
+  s.connect(b);s.start(t,R(0,1.5));s.stop(t+dur);return b;
+}
+function env(g,t,a,peak,dur){g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0001,t+dur)}
+function osc(type,fr){const o=ctx.createOscillator();o.type=type;o.frequency.value=fr;return o}
+
+/* ambient bed: detuned low drone, slow filter sweep, thin dissonant shimmer */
+function drone(){
+  const t=ctx.currentTime,g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.2,t+5);
+  const f=ctx.createBiquadFilter();f.type="lowpass";f.frequency.value=240;f.Q.value=5;
+  const l=osc("sine",.06),lg=ctx.createGain();lg.gain.value=140;l.connect(lg);lg.connect(f.frequency);l.start();
+  [[43.65,"sawtooth"],[44.3,"sawtooth"],[65.4,"triangle"],[92.5,"sine"]].forEach(([fr,ty])=>{const o=osc(ty,fr);o.connect(f);o.start()});
+  f.connect(g);out(g,.35);
+  const h=ctx.createGain();h.gain.setValueAtTime(.0001,t);h.gain.exponentialRampToValueAtTime(.02,t+8);
+  const tl=osc("sine",.23),tg=ctx.createGain();tg.gain.value=.012;tl.connect(tg);tg.connect(h.gain);tl.start();
+  [1480,2093.3].forEach(fr=>{const o=osc("sine",fr);o.connect(h);o.start()});
+  out(h,.8);
+}
+function thump(v){const t=ctx.currentTime,o=ctx.createOscillator(),g=ctx.createGain();o.frequency.setValueAtTime(75,t);o.frequency.exponentialRampToValueAtTime(34,t+.16);env(g,t,.01,v,.25);o.connect(g);out(g,0);o.start(t);o.stop(t+.3)}
+function beat(){if(!hb)return;if(!muted&&!document.hidden){thump(.55);setTimeout(()=>{if(!muted)thump(.38)},240)}setTimeout(beat,60000/bpm)}
+
+/* sfx */
+function whisper(){const t=ctx.currentTime,f=noise(t,2.6,"bandpass",R(2200,4200),2.5),g=ctx.createGain(),n=4+(Math.random()*5|0);let x=t+.1;g.gain.setValueAtTime(.0001,t);
+  for(let i=0;i<n;i++){const d=R(.12,.3);g.gain.linearRampToValueAtTime(R(.15,.4),x+d*.4);g.gain.linearRampToValueAtTime(.02,x+d);x+=d+R(.02,.1)}
+  g.gain.linearRampToValueAtTime(.0001,x+.2);f.connect(g);out(g,.5,R(-1,1))}
+function bell(){const t=ctx.currentTime,g=ctx.createGain(),f0=R(150,260);env(g,t,.005,.25,6);[1,2.76,5.4,8.93,11.3].forEach((m,i)=>{const o=osc("sine",f0*m),p=ctx.createGain();p.gain.value=1/(i+1);o.connect(p);p.connect(g);o.start(t);o.stop(t+6)});out(g,.7,R(-.6,.6))}
+function creak(){const t=ctx.currentTime,o=osc("sawtooth",R(60,110)),b=ctx.createBiquadFilter(),g=ctx.createGain();for(let i=1;i<14;i++)o.frequency.linearRampToValueAtTime(R(40,180),t+i*.09);b.type="bandpass";b.frequency.value=R(500,900);b.Q.value=8;env(g,t,.1,.3,1.3);o.connect(b);b.connect(g);out(g,.4,R(-.8,.8));o.start(t);o.stop(t+1.4)}
+function wail(){const t=ctx.currentTime,f=R(280,420),o=osc("sawtooth",f),v=osc("sine",5.5),vg=ctx.createGain(),b=ctx.createBiquadFilter(),g=ctx.createGain();
+  o.frequency.setValueAtTime(f,t);o.frequency.linearRampToValueAtTime(f*1.6,t+1.2);o.frequency.linearRampToValueAtTime(f*.8,t+3);
+  vg.gain.value=14;v.connect(vg);vg.connect(o.frequency);b.type="bandpass";b.frequency.value=900;b.Q.value=4;env(g,t,1,.1,3);
+  o.connect(b);b.connect(g);out(g,.9,R(-.7,.7));o.start(t);v.start(t);o.stop(t+3.1);v.stop(t+3.1)}
+function bangles(){const t=ctx.currentTime,pan=R(-1,1),n=6+(Math.random()*6|0);let x=t;for(let i=0;i<n;i++){x+=R(.05,.22);const o=osc("sine",R(3200,6500)),g=ctx.createGain();env(g,x,.002,R(.05,.12),.35);o.connect(g);out(g,.6,pan);o.start(x);o.stop(x+.4)}}
+function slam(){const t=ctx.currentTime,g=ctx.createGain(),f=noise(t,.7,"lowpass",260,.7);env(g,t,.005,.8,.6);f.connect(g);out(g,.5);
+  const o=ctx.createOscillator(),og=ctx.createGain();o.frequency.setValueAtTime(90,t);o.frequency.exponentialRampToValueAtTime(30,t+.4);env(og,t,.005,.9,.5);o.connect(og);out(og,0);o.start(t);o.stop(t+.6)}
+function breath(){const t=ctx.currentTime,f=noise(t,3,"bandpass",650,1.2),g=ctx.createGain();g.gain.setValueAtTime(.0001,t);g.gain.linearRampToValueAtTime(.22,t+1);g.gain.linearRampToValueAtTime(.0001,t+1.6);g.gain.linearRampToValueAtTime(.18,t+2.3);g.gain.linearRampToValueAtTime(.0001,t+3);f.connect(g);out(g,.6,R(-.8,.8))}
+function stat(){const t=ctx.currentTime,g=ctx.createGain(),f=noise(t,.14,"highpass",3000);env(g,t,.005,.18,.14);f.connect(g);out(g,0)}
+function buzz(){const t=ctx.currentTime,g=ctx.createGain(),o=osc("sawtooth",100),f=noise(t,.3,"highpass",1500);env(g,t,.01,.12,.3);o.connect(g);f.connect(g);out(g,0);o.start(t);o.stop(t+.3)}
+function speak(){try{const u=new SpeechSynthesisUtterance(pick(["O Stree... kal aana","Kal aana","Peeche mat dekhna","Stree"]));u.lang="hi-IN";u.pitch=.1;u.rate=.55;u.volume=.7;speechSynthesis.speak(u)}catch(e){}}
+
+/* girl scream at full volume: gasp, then two raw distorted screams with a voice crack */
+function dist(k){const n=512,c=new Float32Array(n);for(let i=0;i<n;i++){const x=i*2/n-1;c[i]=(1+k)*x/(1+k*Math.abs(x))}return c}
+function girl(t0,dur,base,hi){
+  const g=ctx.createGain(),ws=ctx.createWaveShaper(),mix=ctx.createGain();
+  g.gain.setValueAtTime(.0001,t0);g.gain.exponentialRampToValueAtTime(1.3,t0+.03);g.gain.setValueAtTime(1.2,t0+dur-.35);g.gain.exponentialRampToValueAtTime(.0001,t0+dur);
+  ws.curve=dist(25);ws.oversample="2x";mix.gain.value=.5;
+  [[900,6],[2300,7],[3400,9]].forEach(([fr,q])=>{const b=ctx.createBiquadFilter();b.type="bandpass";b.frequency.value=fr;b.Q.value=q;mix.connect(b);b.connect(ws)});
+  [1,1.005,2.01].forEach((m,i)=>{const o=osc("sawtooth",base*m),v=osc("sine",6.5+i),vg=ctx.createGain();
+    o.frequency.setValueAtTime(base*m,t0);o.frequency.exponentialRampToValueAtTime(hi*m,t0+.14);o.frequency.linearRampToValueAtTime(hi*1.08*m,t0+dur*.55);
+    o.frequency.setValueAtTime(hi*1.5*m,t0+dur*.6);o.frequency.linearRampToValueAtTime(hi*.85*m,t0+dur);
+    vg.gain.value=28*m;v.connect(vg);vg.connect(o.frequency);o.connect(mix);o.start(t0);v.start(t0);o.stop(t0+dur);v.stop(t0+dur)});
+  const nf=noise(t0,dur,"bandpass",3800,.7),ng=ctx.createGain();ng.gain.value=.45;nf.connect(ng);ng.connect(ws);
+  ws.connect(g);out(g,.45)}
+function scream(){
+  if(!ctx||muted)return;ctx.resume();const t=ctx.currentTime;
+  const gs=noise(t,.3,"bandpass",1500,1),gg=ctx.createGain();gs.frequency.exponentialRampToValueAtTime(3500,t+.25);env(gg,t,.2,.5,.28);gs.connect(gg);out(gg,.2);
+  girl(t+.25,1.8,640,1500);girl(t+2.3,1,780,1750);slam();
+  document.documentElement.classList.add("shake");setTimeout(()=>document.documentElement.classList.remove("shake"),800);
+}
+HX.scream=scream;
+
+/* visual haunting */
+function flicker(){if(reduce)return;buzz();const d=$("#dark");let n=0;(function f(){d.classList.toggle("blk");if(++n<7)setTimeout(f,R(40,140));else d.classList.remove("blk")})()}
+function eyes(){const e=$("#eyes");e.style.left=R(5,85)+"vw";e.style.top=R(10,80)+"vh";e.className="on";setTimeout(()=>e.classList.add("bl"),R(1200,2000));setTimeout(()=>e.className="",R(2400,3600))}
+function ghost(){const e=$("#ghost");e.textContent=pick(["PEECHE DEKHO","SHE IS BEHIND YOU","O STREE, KAL AANA","DON'T TURN AROUND","12:42","I SEE YOU","KAL AANA"]);e.style.left=R(4,55)+"vw";e.style.top=R(10,80)+"vh";e.style.fontSize=R(28,90)+"px";e.classList.remove("go");void e.offsetWidth;e.classList.add("go")}
+function hgl(){const a=[...document.querySelectorAll("h2,h3,.board b")],el=pick(a);if(!el)return;el.classList.add("gl");if(ctx&&!muted)stat();setTimeout(()=>el.classList.remove("gl"),450)}
+function vis(){pick([flicker,eyes,eyes,ghost,ghost,hgl])()}
+function sched(){clearTimeout(evT);evT=setTimeout(()=>{
+  if(!document.hidden){if(ctx&&!muted)pick([whisper,whisper,bell,creak,wail,bangles,bangles,slam,breath,speak])();if(Math.random()<.6)vis()}
+  sched()},R(3500,9000))}
+
+/* flashlight follows pointer */
+(function(){let tx=innerWidth/2,ty=innerHeight*.45,x=tx,y=ty;const d=$("#dark");
+  const mv=e=>{tx=e.clientX;ty=e.clientY;const ey=$("#eyes").getBoundingClientRect();if(Math.hypot(ey.left-tx,ey.top-ty)<140)$("#eyes").className=""};
+  addEventListener("pointermove",mv,{passive:true});addEventListener("pointerdown",mv,{passive:true});
+  (function loop(){x+=(tx-x)*.14;y+=(ty-y)*.14;d.style.setProperty("--fx",x+"px");d.style.setProperty("--fy",y+"px");requestAnimationFrame(loop)})();
+})();
+
+/* interaction sfx */
+let last=0;
+document.addEventListener("mouseover",e=>{if(!ctx||muted||!e.target.closest)return;const now=performance.now();if(now-last>260&&e.target.closest("h1,h2,h3,.btn,.chip,.row,.pin,.tag")){last=now;stat()}});
+document.addEventListener("pointerdown",e=>{if(!ctx||muted||!e.target.closest)return;
+  if(e.target.closest(".pin,.row"))pick([creak,bell,whisper,bangles])();else if(e.target.closest(".chip,.btn"))stat()});
+$("#form").addEventListener("submit",()=>{if(ctx&&!muted){wail();setTimeout(speak,900)}vis()});
+addEventListener("scroll",()=>{const f=scrollY/Math.max(1,document.documentElement.scrollHeight-innerHeight);bpm=60+f*55},{passive:true});
+if("IntersectionObserver" in window){const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting&&ctx&&!muted&&Math.random()<.6)pick([whisper,breath,bangles])()}),{threshold:.4});document.querySelectorAll("section").forEach(s=>io.observe(s))}
+document.addEventListener("visibilitychange",()=>{if(!ctx)return;document.hidden?ctx.suspend():ctx.resume()});
+
+/* more jumpscares: 6 kinds, random timing, idle trigger, pin-click trigger */
+function riser(){const t=ctx.currentTime,g=ctx.createGain(),f=noise(t,.6,"bandpass",300,3);f.frequency.exponentialRampToValueAtTime(5000,t+.55);g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.7,t+.55);g.gain.linearRampToValueAtTime(.0001,t+.6);f.connect(g);out(g,.3)}
+function glass(){const t=ctx.currentTime,g=ctx.createGain(),f=noise(t,.5,"highpass",4000);env(g,t,.005,.6,.45);f.connect(g);out(g,.4);for(let i=0;i<7;i++){const o=osc("sine",R(2500,9000)),p=ctx.createGain(),x=t+R(0,.25);env(p,x,.002,.15,.3);o.connect(p);out(p,.3,R(-1,1));o.start(x);o.stop(x+.35)}}
+const snd=f=>{if(ctx&&!muted)try{f()}catch(e){}};
+const FACE='<svg class="f" viewBox="0 0 400 480"><rect width="400" height="480" fill="#000"/><path d="M30 480C10 250 60 40 200 30S390 250 370 480Z" fill="#050505" stroke="#1a1a1a"/><ellipse cx="200" cy="235" rx="82" ry="112" fill="#e4e4e4"/><path d="M118 210C120 110 280 110 282 210C250 150 150 150 118 210Z" fill="#030303"/><path d="M130 160C100 260 110 380 90 480M270 160C300 260 290 380 310 480" stroke="#030303" stroke-width="26" fill="none"/><ellipse cx="168" cy="232" rx="17" ry="24" fill="#000"/><ellipse cx="232" cy="232" rx="17" ry="24" fill="#000"/><circle cx="168" cy="236" r="3" fill="#fff"/><circle cx="232" cy="236" r="3" fill="#fff"/><path d="M165 315Q200 440 235 315Q200 300 165 315Z" fill="#000"/><path d="M150 188L186 198M250 188L214 198" stroke="#222" stroke-width="3"/></svg>';
+const HANG='<svg viewBox="0 0 300 640" style="width:100%;display:block"><path d="M150 0V150" stroke="#777" stroke-width="5"/><path d="M95 640L110 270Q150 230 190 270L205 640Z" fill="#d9d9d9"/><ellipse cx="150" cy="215" rx="42" ry="56" fill="#e8e8e8" transform="rotate(14 150 215)"/><path d="M105 190C110 130 195 130 198 195C180 160 125 160 105 190ZM108 200C85 300 95 380 80 470M192 200C215 300 205 380 220 470" stroke="#050505" stroke-width="20" fill="#050505"/><ellipse cx="136" cy="215" rx="9" ry="13" fill="#000"/><ellipse cx="168" cy="220" rx="9" ry="13" fill="#000"/><path d="M134 255Q152 290 170 256Q152 248 134 255Z" fill="#000"/></svg>';
+const sc2=document.createElement("div");sc2.id="sc2";document.body.appendChild(sc2);
+let t2,lastSc=0,idle;
+function show2(h,ms,cl){clearTimeout(t2);sc2.className="on "+(cl||"");sc2.innerHTML=h;t2=setTimeout(hide2,ms||3000)}
+function hide2(){clearTimeout(t2);sc2.className="";sc2.innerHTML=""}
+sc2.addEventListener("click",hide2);addEventListener("keydown",e=>{if(e.key==="Escape")hide2()});
+function crack(){const cx=R(30,70),cy=R(25,65);let p="";for(let i=0;i<16;i++){const a=i/16*6.283+R(-.15,.15);let x=cx,y=cy,d="M"+cx+" "+cy;for(let k=0;k<7;k++){const l=R(5,13);x+=Math.cos(a+R(-.25,.25))*l;y+=Math.sin(a+R(-.25,.25))*l*1.3;d+="L"+x.toFixed(1)+" "+y.toFixed(1)}p+='<path d="'+d+'"/>'}
+  show2('<div class="fl"></div><svg class="cr" viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" stroke="#fff" stroke-width=".6">'+p+'</svg>',900,"clear");snd(glass);
+  setTimeout(()=>{show2(FACE);scream()},800)}
+const SC=[
+ ()=>{window.__scare&&window.__scare()},
+ ()=>{snd(riser);setTimeout(()=>{show2(FACE);scream()},550)},
+ ()=>{snd(creak);setTimeout(()=>{show2('<div class="hang">'+HANG+'</div>');scream()},700)},
+ ()=>{show2('<div class="eyz"><i></i><i></i></div>',2600);snd(slam);setTimeout(()=>{sc2.insertAdjacentHTML("beforeend",'<div class="fl"></div>');scream()},900)},
+ crack,
+ ()=>{show2('<div class="tv"></div><div class="big">SHE IS<br>BEHIND YOU</div>',3000);for(let i=0;i<4;i++)setTimeout(()=>snd(stat),i*180);setTimeout(scream,500)}
+];
+function runScare(){const n=performance.now();if(!started||n-lastSc<6000||$("#scare-sw").getAttribute("aria-pressed")==="false")return;lastSc=n;pick(SC)()}
+function loopScares(){setTimeout(()=>{runScare();loopScares()},R(9000,19000))}
+function idleReset(){clearTimeout(idle);idle=setTimeout(runScare,12000)}
+function startScares(){setTimeout(runScare,1500);loopScares();idleReset();["pointermove","scroll","keydown"].forEach(ev=>addEventListener(ev,idleReset,{passive:true}))}
+document.addEventListener("pointerdown",e=>{if(e.target.closest&&e.target.closest(".pin")&&Math.random()<.35)setTimeout(runScare,400)});
+
+/* scare caption + sound toggle + gate */
+const sc=$("#scare");
+new MutationObserver(()=>{if(sc.classList.contains("on")){const c=sc.querySelector(".cap");if(c)c.textContent=pick(["O Stree, kal aana.","DON'T TURN AROUND","SHE FOUND YOU","KAL AANA","PEECHE DEKHO"]);if(ctx&&!muted)flicker()}}).observe(sc,{attributes:true,attributeFilter:["class"]});
+function boot(){if(!init())return;ctx.resume();muted=false;drone();hb=true;beat();sched()}
+function paint(){$("#snd-sw").setAttribute("aria-pressed",!muted);$("#snd-t").textContent=muted?"Sound off":"Sound on"}
+$("#snd-sw").addEventListener("click",()=>{
+  if(!ctx){boot()}else{muted=!muted;master.gain.setTargetAtTime(muted?0:1,ctx.currentTime,.05);if(muted)try{speechSynthesis.cancel()}catch(e){}}
+  if(!started){started=true;sched()}paint()});
+function enter(snd){if(started)return;started=true;if(snd)boot();else sched();paint();$("#gate").hidden=true;document.body.classList.remove("gated");startScares()}
+$("#g-on").addEventListener("click",()=>enter(true));$("#g-off").addEventListener("click",()=>enter(false));
+paint();$("#g-on").focus();
+})();
+</script>
+</body>
+</html>
